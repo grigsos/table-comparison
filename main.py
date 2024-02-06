@@ -25,12 +25,12 @@ def compare_dataframes(df1, df2, unique_key):
     df1_sorted = df1.sort_values(by=unique_key).reset_index(drop=True)
     df2_sorted = df2.sort_values(by=unique_key).reset_index(drop=True)
 
-    if unique_key == 'derived_project_name_hash':
-        print(df1_sorted.head())
-        print(df2_sorted.head())
+    # if unique_key == 'derived_project_name_hash':
+    #     print(df1_sorted.head())
+    #     print(df2_sorted.head())
 
     # Compare the sorted DataFrames and get the rows that differ
-    df_diff = pd.concat([df1_sorted, df2_sorted]).drop_duplicates(keep=False)
+    df_diff = df1_sorted.compare(df2_sorted)
 
     return df_diff
 
@@ -63,7 +63,7 @@ for filename in os.listdir(initial_data_folder):
                 else:
                     unique_key = 'index'
 
-                #print(f"Comparing {filename} and {post_filename}...")
+                print(f"Comparing {filename} and {post_filename}...")
                 df_differences = compare_dataframes(initial_df, post_df, unique_key)
                 if not df_differences.empty:
                     differences.append(df_differences)
@@ -73,8 +73,11 @@ for filename in os.listdir(initial_data_folder):
 
 if differences:
     all_differences = pd.concat(differences)
+    all_differences.to_csv('differences.csv', index=False)
+    print("Diffeeences found and saved to differences.csv")
 else:
     all_differences = pd.DataFrame()
+    all_differences.to_csv('differences.csv', index=False)
+    print("No differences found and differences.csv is empty")
 
-all_differences.to_csv('differences.csv', index=False)
-print("Differences saved to differences.csv")
+
