@@ -30,6 +30,7 @@ def compare_dataframes(df1, df2, unique_key):
 initial_data_folder = 'initial'
 post_data_folder = 'post'
 differences = []
+unique_id_list = ['technology_status_', 'technology_scope_', 'technology_risk_', 'technology_decision_', 'technology_charter_', 'technology_changelog_'] # not schedule or projects
 
 for filename in os.listdir(initial_data_folder):
     if filename.endswith('.csv'):
@@ -55,25 +56,20 @@ for filename in os.listdir(initial_data_folder):
                     post_df = remove_columns(post_df, ['index'])
                     initial_df = remove_columns(initial_df, ['index'])
                 elif 'pipeline' in filename:
-                    print("pipeline")
                     unique_key = 'derived_trial_name_hash'
                     post_df = remove_columns(post_df, ['index'])
                     initial_df = remove_columns(initial_df, ['index'])
-                elif 'charter' in filename:
+                elif base_filename in unique_id_list:
                     unique_key = 'uniqueid'
                     post_df = remove_columns(post_df, ['index'])
                     initial_df = remove_columns(initial_df, ['index'])
-                elif 'scope' in filename:
-                    unique_key = 'uniqueid'
-                    post_df = remove_columns(post_df, ['index'])
-                    initial_df = remove_columns(initial_df, ['index'])
-
                 else:
                     unique_key = 'index'
 
-                print(f"Comparing {filename} and {post_filename}...")
+                print(f"Comparing {base_filename} ...")
                 df_differences = compare_dataframes(initial_df, post_df, unique_key)
                 if not df_differences.empty:
+                    print(f"Differences found between {filename} and {post_filename}.")
                     differences.append(df_differences)
                 break
         else:
