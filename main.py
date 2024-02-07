@@ -20,6 +20,9 @@ def compare_dataframes(df1, df2, unique_key):
     # Ensure the unique_key column is present in both DataFrames
     if unique_key not in df1.columns or unique_key not in df2.columns:
         raise ValueError(f"Unique key '{unique_key}' not found in one of the DataFrames.")
+    
+    if df1[unique_key].nunique() != len(df1) or df2[unique_key].nunique() != len(df2):
+        raise ValueError(f"The unique key '{unique_key}' is not unique the logged comparison before this error.")
 
     # Reorder the DataFrames by the unique key to ensure row alignment
     df1_sorted = df1.sort_values(by=unique_key).reset_index(drop=True)
