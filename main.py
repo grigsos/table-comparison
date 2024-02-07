@@ -60,6 +60,11 @@ for filename in os.listdir(initial_data_folder):
                     unique_key = 'derived_project_name_hash'
                     post_df = remove_columns(post_df, ['index'])
                     initial_df = remove_columns(post_df, ['index'])
+                elif 'pipeline' in filename:
+                    unique_key = 'derived_trial_name_hash'
+                    post_df = remove_columns(post_df, ['index'])
+                    initial_df = remove_columns(post_df, ['index'])
+                
                 else:
                     unique_key = 'index'
 
